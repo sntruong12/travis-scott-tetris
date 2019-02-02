@@ -17,6 +17,8 @@ HTML, CSS, JavaScript.
 
 ## Pseudocode
 
+**_GIVE ME THE LOOT!_**
+
 1. The start button will initialize the game.
 - Fade in audio of instrumental Travis Scott music.
 2. On the 10 cells wide by 20 cells high game board, one tetromino will descend from the top row down to the bottom of the game board.
@@ -27,13 +29,16 @@ HTML, CSS, JavaScript.
 - Each piece cannot move beyond the left and right wall of the game board.
 - We need to lock the pieces in place once they reach the bottom of the board or touch the top of anoother piece. 
 - Once the game piece is locked, that should update the gameboard and spawn a new random tetromino at the top. 
-3. When all ten cells in a single row or mulitple rows is occupied, update the gameboard to clear those rows that are filled. This will also update the score.
+3. When all ten cells in a single row or mulitple rows is occupied, update the gameboard to clear those rows that are filled.
 - If there are cells occupied on any rows above a cleared row, those rows should shift down and fill in the cleared rows.
 - If a row is cleared, add a sound bite of Travis Scott's adlibs will play once.
-- 1 row clear will award 100.
-- 2 rows cleared will award 300.
-- 3 rows cleared will award 600.
-- 4 rows cleared will award 800.
+- When you clear a row or multiple rows the score will be updated based on the following table.
+Rows cleared|Points awarded
+---|---
+1|100
+2|300
+3|600
+4|800
 
 ## Goals
 
@@ -46,3 +51,4 @@ HTML, CSS, JavaScript.
 2. Implement a way to change the background of the game board as the player reaches a higher levels.
 
 3. Implement an image of Travis Scott that will randomly show a thought bubble displaying a random famous adlib when the player clears 4 rows with one tetomino.
+
