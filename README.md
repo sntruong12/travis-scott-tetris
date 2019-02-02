@@ -41,6 +41,10 @@ Rows cleared | Points awarded
 3 | 600
 4 | 800
 
+4. End the game when any tetromino piece is placed outside the top row of the game board.
+- Display some image and highlight the score.
+- Also display a reply button that will reinitialize the game for them.
+
 ## Goals
 
 1. Create a working tetris game.
