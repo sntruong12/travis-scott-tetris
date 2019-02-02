@@ -33,12 +33,13 @@ HTML, CSS, JavaScript.
 - If there are cells occupied on any rows above a cleared row, those rows should shift down and fill in the cleared rows.
 - If a row is cleared, add a sound bite of Travis Scott's adlibs will play once.
 - When you clear a row or multiple rows the score will be updated based on the following table.
-Rows cleared|Points awarded
----|---
-1|100
-2|300
-3|600
-4|800
+
+Rows cleared | Points awarded
+--- | ---
+1 | 100
+2 | 300
+3 | 600
+4 | 800
 
 ## Goals
 
