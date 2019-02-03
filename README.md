@@ -13,7 +13,7 @@ placeholder for image of the game
 
 ## Technology Stack
 
-HTML, CSS, JavaScript.
+HTML Canvas, JavaScript.
 
 ## Pseudocode
 
@@ -57,3 +57,6 @@ Rows cleared | Points awarded
 
 3. Implement an image of Travis Scott that will randomly show a thought bubble displaying a random famous adlib when the player clears 4 rows with one tetomino.
 
+## Challenges
+
+1. The first challenge I faced for this was to figure out what tools are out there that can help create the game. I researched a few tutorials and found our about the HMTL canvas tag. This can be used to create a board and all of our tetrominoes.
