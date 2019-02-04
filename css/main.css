@@ -1,0 +1,30 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: 100px 1fr;
+  grid-template-areas:
+  "hdr hdr hdr"
+  "board info media";
+}
+
+header {
+  grid-area: hdr;
+  text-align: center;
+}
+
+section.board-section {
+  grid-area: board;
+}
+
+section.info-section {
+  grid-area: info;
+}
+
+section.media-section {
+  grid-area: media;
+}
