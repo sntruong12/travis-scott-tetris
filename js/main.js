@@ -4,7 +4,7 @@
 const ROW = 20;
 const COL = 10;
 
-//SQ is for square which will represent our individual cells on the board.
+// SQ is for square which will represent the size of our individual cells on the board. 30x30 px cells
 const SQ = 30;
 
 // define an empty sqare in the board
@@ -23,7 +23,7 @@ const context = canvas.getContext('2d');
 
 /*----- functions -----*/
 
-// 1. The start button will initialize the game.
+// start button will initialize the game.
 // - Fade in audio of instrumental Travis Scott music.
 init();
 
@@ -32,15 +32,15 @@ function init() {
   createBoard();
 }
 
-// 2. Create the game board
-function createBoard () {
-//creates 20 rows on the board
+//  create the game board
+function createBoard() {
+// create 20 rows on the board
   for(let r = 0; r < ROW; r++) {
     // set to empty array because it will contain a column value as well.
     board[r] = [ ];
-    //creates 10 columns on the board
+    // create 10 columns on the board
     for(let c = 0; c < COL; c++) {
-      //set it to vacant to let us know the cell is vacant.
+      // set it to vacant to let us know the cell is vacant.
       board[r][c] = VACANT;
     }
   }
@@ -49,7 +49,15 @@ function createBoard () {
 // - The game board will contain random opaque background images of Travis Scott.
 
 //  Draw a tetromino that will descend from the top row down to the bottom of the game board. 
-
+function drawPiece(x, y, color) {
+  // define the color of the drawing
+  context.fillStyle = color;
+  // define the location (x, y) and the size of the drawing
+  context.fillRect(x, y, SQ, SQ);
+  // define the color of the outline
+  context.strokeStyle = 'black';
+  context.strokeRect(x, y, SQ, SQ);
+}
 
 // - We need to design all 7 tetromino pieces.
 // - The tetromino will drop one row every 1 second.
