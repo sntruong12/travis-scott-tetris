@@ -4,15 +4,15 @@
 const ROW = 20;
 const COL = 10;
 
-// SQ is for square which will represent the size of our individual cells on the board. 30x30 px cells
+// SQ is for square which will represent the size of our individual cells on the board. 30x30 px cell
 const SQ = 30;
 
 // define an empty sqare in the board
-const VACANT = '#FFFFFF';
+const EMPTY = 'white';
 
 /*----- app's state (variables) -----*/ 
 
-let board;
+let board, piece, pieceColor;
 
 /*----- cached element references -----*/ 
 const canvas = document.querySelector('canvas');
@@ -30,6 +30,8 @@ init();
 function init() {
   board = [];
   createBoard();
+  drawBoard();
+  drawTetromino();
 }
 
 //  create the game board
@@ -40,26 +42,49 @@ function createBoard() {
     board[r] = [ ];
     // create 10 columns on the board
     for(let c = 0; c < COL; c++) {
-      // set it to vacant to let us know the cell is vacant.
-      board[r][c] = VACANT;
+      // set it to empty to let us know the cell is such.
+      board[r][c] = EMPTY;
     }
   }
+}
+
+// draw the cells on the board
+function drawBoard() {
+  board.forEach((row, rIdx) => {
+    row.forEach((col, cIdx) => {
+      drawSq(cIdx, rIdx, board[rIdx][cIdx]);
+    })
+  });
 }
 
 // - The game board will contain random opaque background images of Travis Scott.
 
 //  Draw a tetromino that will descend from the top row down to the bottom of the game board. 
-function drawPiece(x, y, color) {
+function drawSq(x, y, color) {
   // define the color of the drawing
   context.fillStyle = color;
   // define the location (x, y) and the size of the drawing
-  context.fillRect(x, y, SQ, SQ);
+  // multiple by SQ because that's the size of one cell so we want to make sure 1 unit for x or y will increment/decrement based on our SQ unit.
+  context.fillRect(x*SQ, y*SQ, SQ, SQ);
   // define the color of the outline
   context.strokeStyle = 'black';
-  context.strokeRect(x, y, SQ, SQ);
+  context.strokeRect(x*SQ, y*SQ, SQ, SQ);
 }
 
-// - We need to design all 7 tetromino pieces.
+// design all 7 tetromino pieces.
+// in tetrominoes.js we visualize the tetris pieces as an array of an array. 1 indicates a square and 0 indicates an empty square. 1 and 0 have boolean values for true and false respectively so we can draw squares based checking the value of each element of every array. every piece has 4 different versions based on rotation.
+function drawTetromino() {
+  piece = J[0];
+  pieceColor = 'blue';
+  piece.forEach((row, rIdx) => {
+    row.forEach((col, cIdx) => {
+      if(piece[rIdx][cIdx]) {
+        drawSq(cIdx, rIdx, pieceColor);
+      }
+    })
+  })
+}
+
 // - The tetromino will drop one row every 1 second.
 // - Each piece can move left, right, or down on the board.
 // - Each piece cannot move beyond the left and right wall of the game board.
