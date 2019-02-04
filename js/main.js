@@ -1,6 +1,15 @@
 /*----- constants -----*/ 
 
+// define how many rows and columsn the gameboard contains
+const ROW = 20;
+const COL = 10;
+
+// define an empty sqare in the board
+const VACANT = '#FFFFFF';
+
 /*----- app's state (variables) -----*/ 
+
+let board;
 
 /*----- cached element references -----*/ 
 
@@ -11,7 +20,26 @@
 
 // 1. The start button will initialize the game.
 // - Fade in audio of instrumental Travis Scott music.
+init ();
+function init() {
+  board = [];
+  createBoard();
+}
+
 // 2. On the 10 cells wide by 20 cells high game board, one tetromino will descend from the top row down to the bottom of the game board.
+function createBoard () {
+//creates 20 rows on the board
+  for(let r = 0; r < ROW; r++) {
+    // set to empty array because it will contain a column value as well.
+    board[r] = [ ];
+    //creates 10 columns on the board
+    for(let c = 0; c < COL; c++) {
+      //set it to vacant to let us know the cell is vacant.
+      board[r][c] = VACANT;
+    }
+  }
+}
+
 // - The game board will contain random opaque background images of Travis Scott.
 // - We need to design all 7 tetromino pieces.
 // - The tetromino will drop one row every 1 second.
