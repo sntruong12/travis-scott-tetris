@@ -43,20 +43,40 @@ class Tetromino {
       })
     })
   }
-
-
-//increment the y value to move it down one cell then redraw the piece by calling draw.
+  clearPiece() {
+    this.activePiece.forEach((row, rIdx) => {
+      row.forEach((col, cIdx) => {
+        if(this.activePiece[rIdx][cIdx]) {
+          drawSq(this.x + cIdx, this.y + rIdx, EMPTY);
+        }
+      })
+    })
+  }
+// moving the pieces will require 3 things, clear the previous piece,increment the y value to move it down one cell, then draw the piece.
   moveDown() {
+    this.clearPiece();
     this.y++;
     this.drawPiece();
   }
+  moveRight() {
+    this.clearPiece();
+    this.x++;
+    this.drawPiece();
+  }
+  moveLeft() {
+    this.clearPiece();
+    this.x--;
+    this.drawPiece();
+  }
 }
+
+// let son = new Tetromino(PIECES[0][0], PIECES[0][1]);
 
 
 // - The tetromino will drop one row every 1 second.
 /*----- app's state (variables) -----*/ 
 
-let board, piece;
+let board, currentPiece;
 
 /*----- cached element references -----*/ 
 const canvas = document.querySelector('canvas');
@@ -79,7 +99,7 @@ function init() {
   board = [];
   createBoard();
   drawBoard();
-  // drawTetromino();
+  // get currentPiece randomly
 }
 
 //  create the game board
