@@ -66,3 +66,5 @@ Rows cleared | Points awarded
 ## Challenges
 
 1. The first challenge I faced for this was to figure out what tools are out there that can help create the game. I researched a few tutorials and found out about the HMTL canvas tag. This can be used to create a board and all of our tetrominoes.
+
+2. Another challenge I faced was how to map the board. 

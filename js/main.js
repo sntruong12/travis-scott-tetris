@@ -8,11 +8,55 @@ const COL = 10;
 const SQ = 30;
 
 // define an empty sqare in the board
-const EMPTY = 'white';
+const EMPTY = '#FFFFFF';
 
+const PIECES = [
+  [I, '#D1B37E'],
+  [J, '#E83627'],
+  [L, '#86A4BF'],
+  [O, '#3D88A7'],
+  [S, '#CF8131'],
+  [T, '#401A08'],
+  [Z, '#2B5B9E']
+];
+
+// class for tetromino pieces.
+class Tetromino {
+  constructor(piece, color) {
+    this.piece = piece;
+    this.color = color;
+
+    // pieceNum is used to reference the tetrominoes starting position.
+    this.pieceNum = 0;
+    this.activePiece = this.piece[this.pieceNum];
+    // x and y is for the start position of the piece aka the top of the board in the center
+    this.x = 3;
+    this.y = 0;
+  }
+// in tetrominoes.js we visualize the tetris pieces as an array of an array. 1 indicates a square and 0 indicates an empty square. 1 and 0 have boolean values for true and false respectively so we can draw squares based checking the value of each element of every array. every piece has 4 different versions based on rotation. This draw method will draw the piece.
+  drawPiece() {
+    this.activePiece.forEach((row, rIdx) => {
+      row.forEach((col, cIdx) => {
+        if(this.activePiece[rIdx][cIdx]) {
+          drawSq(this.x + cIdx, this.y + rIdx, this.color);
+        }
+      })
+    })
+  }
+
+
+//increment the y value to move it down one cell then redraw the piece by calling draw.
+  moveDown() {
+    this.y++;
+    this.drawPiece();
+  }
+}
+
+
+// - The tetromino will drop one row every 1 second.
 /*----- app's state (variables) -----*/ 
 
-let board, piece, pieceColor;
+let board, piece;
 
 /*----- cached element references -----*/ 
 const canvas = document.querySelector('canvas');
@@ -20,6 +64,10 @@ const canvas = document.querySelector('canvas');
 const context = canvas.getContext('2d');
 
 /*----- event listeners -----*/ 
+
+// - Each piece can move left, right, or down on the board.
+
+// - Each piece can rotate between its four versions.
 
 /*----- functions -----*/
 
@@ -31,7 +79,7 @@ function init() {
   board = [];
   createBoard();
   drawBoard();
-  drawTetromino();
+  // drawTetromino();
 }
 
 //  create the game board
@@ -71,22 +119,12 @@ function drawSq(x, y, color) {
   context.strokeRect(x*SQ, y*SQ, SQ, SQ);
 }
 
-// design all 7 tetromino pieces.
-// in tetrominoes.js we visualize the tetris pieces as an array of an array. 1 indicates a square and 0 indicates an empty square. 1 and 0 have boolean values for true and false respectively so we can draw squares based checking the value of each element of every array. every piece has 4 different versions based on rotation.
-function drawTetromino() {
-  piece = J[0];
-  pieceColor = 'blue';
-  piece.forEach((row, rIdx) => {
-    row.forEach((col, cIdx) => {
-      if(piece[rIdx][cIdx]) {
-        drawSq(cIdx, rIdx, pieceColor);
-      }
-    })
-  })
-}
 
-// - The tetromino will drop one row every 1 second.
-// - Each piece can move left, right, or down on the board.
+
+
+
+
+
 // - Each piece cannot move beyond the left and right wall of the game board.
 // - We need to lock the pieces in place once they reach the bottom of the board or touch the top of anoother piece. 
 // - Once the game piece is locked, that should update the gameboard and spawn a new random tetromino at the top. 
