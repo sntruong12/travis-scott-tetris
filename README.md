@@ -69,3 +69,5 @@ Rows cleared | Points awarded
 
 2. Another challenge I faced was how to map the board. After looking through a handful of tutorials, I decided to make the board an array of 20 arrays which was for each row for the board. Each row contained 10 elements which represented the columns.
 
+3. Another challenge is how to prevent the pieces from going beyond the left and right walls in addition to the bottom row. Based on the grid that we have set up, anything beyond the left wall would have an X value of less than 0. Anything beyond the right wall would have an X value equal to or greater than 30 SQ units (300px). We are able to combine the value of the X/Y value plus the current tetromino piece's array value X/Y value plus 1 unit in the direction the piece is moving. We compare the sum above to 0 for the left wall, to 10 for the right wall, and to 20 for the bottom wall.
+
