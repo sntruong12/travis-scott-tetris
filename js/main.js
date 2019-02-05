@@ -1,4 +1,7 @@
+/*----------------------------------------*/ 
 /*----- constants -----*/ 
+/*----------------------------------------*/ 
+
 
 // define how many rows and columns the gameboard contains - 200 cells total.
 const ROW = 20;
@@ -68,28 +71,43 @@ class Tetromino {
     this.x--;
     this.drawPiece();
   }
+  //each piece can has four versions, in order to cycle between all of them we can add 1 to the current value of pieceNum and use the modulus operator to get the next number. Once pieceNum is at value 3, adding 1 to it will cycle us back to the 0.
+  rotatePiece() {
+    this.clearPiece();
+    this.pieceNum = (this.pieceNum + 1) % this.piece.length;
+    this.activePiece = this.piece[this.pieceNum];
+    this.drawPiece();
+  }
 }
 
 // let son = new Tetromino(PIECES[0][0], PIECES[0][1]);
 
 
-// - The tetromino will drop one row every 1 second.
-/*----- app's state (variables) -----*/ 
 
-let board, currentPiece;
+/*----------------------------------------*/ 
+/*----- app's state (variables) -----*/ 
+/*----------------------------------------*/ 
+
+let board, currentPiece, startTime;
 
 /*----- cached element references -----*/ 
 const canvas = document.querySelector('canvas');
 // this is a method on the canvas obj that allows us to draw on the canvas
 const context = canvas.getContext('2d');
 
+/*----------------------------------------*/ 
 /*----- event listeners -----*/ 
+/*----------------------------------------*/ 
+
 
 // - Each piece can move left, right, or down on the board.
 
 // - Each piece can rotate between its four versions.
 
+/*----------------------------------------*/ 
 /*----- functions -----*/
+/*----------------------------------------*/ 
+
 
 // start button will initialize the game.
 // - Fade in audio of instrumental Travis Scott music.
@@ -99,7 +117,10 @@ function init() {
   board = [];
   createBoard();
   drawBoard();
-  // get currentPiece randomly
+  render();
+  // startTime = Date.now();
+  // timer();
+  // setInterval(drop, 1000);
 }
 
 //  create the game board
@@ -139,10 +160,30 @@ function drawSq(x, y, color) {
   context.strokeRect(x*SQ, y*SQ, SQ, SQ);
 }
 
+function render() {
+  let randomPiece = Math.floor(Math.random() * PIECES.length);
+  console.log(randomPiece);
+  currentPiece = new Tetromino(PIECES[randomPiece][0], PIECES[randomPiece][1]);
 
+  currentPiece.drawPiece();
+  
+}
 
+// - The tetromino will drop one row every 1 second.
+// function timer() {
+//   let now = Date.now();
+//   let difference = now - startTime;
+//   console.log(difference);
+//   if(difference > 1000) {
+//     currentPiece.moveDown();
+//     startTime = Date.now();
+//   }
+//   requestAnimationFrame(timer);
+// }
 
-
+// function drop() {
+//   currentPiece.moveDown();
+// }
 
 
 // - Each piece cannot move beyond the left and right wall of the game board.
