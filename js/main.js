@@ -36,7 +36,7 @@ class Tetromino {
     this.x = 3;
     this.y = 0;
   }
-// in tetrominoes.js we visualize the tetris pieces as an array of an array. 1 indicates a square and 0 indicates an empty square. 1 and 0 have boolean values for true and false respectively so we can draw squares based checking the value of each element of every array. every piece has 4 different versions based on rotation. This draw method will draw the piece.
+// in tetrominoes.js we visualize the tetris pieces as an array of an array. 1 indicates a square and 0 indicates an empty square. 1 and 0 have boolean values for true and false respectively so we can draw squares based checking the boolean value of each element of every array. every piece has different versions based on rotation. This draw method will draw the piece based on it's current activePiece property.
   drawPiece() {
     this.activePiece.forEach((row, rIdx) => {
       row.forEach((col, cIdx) => {
@@ -99,10 +99,7 @@ const context = canvas.getContext('2d');
 /*----- event listeners -----*/ 
 /*----------------------------------------*/ 
 
-
-// - Each piece can move left, right, or down on the board.
-
-// - Each piece can rotate between its four versions.
+document.addEventListener('keydown', movePiece);
 
 /*----------------------------------------*/ 
 /*----- functions -----*/
@@ -185,6 +182,24 @@ function render() {
 //   currentPiece.moveDown();
 // }
 
+// User can move the currentPiece left, right, or down. Also can rotate. Callback function to match the arrow keys and the z key to specific options.
+
+function movePiece(event) {
+  switch (event.key) {
+    case 'ArrowRight':
+    currentPiece.moveRight();
+    break;
+    case 'ArrowLeft':
+    currentPiece.moveLeft();
+    break;
+    case 'ArrowDown':
+    currentPiece.moveDown();
+    break;
+    case 'z':
+    currentPiece.rotatePiece();
+    break;
+  }
+}
 
 // - Each piece cannot move beyond the left and right wall of the game board.
 // - We need to lock the pieces in place once they reach the bottom of the board or touch the top of anoother piece. 
