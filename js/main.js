@@ -57,9 +57,11 @@ class Tetromino {
   }
   // moving the pieces will require 3 things, clear the previous piece,increment the y value to move it down one cell, then draw the piece.
   moveDown() {
-    this.clearPiece();
-    this.y++;
-    this.drawPiece();
+    if(this.isCollidingBottom(this.activePiece) === false) {
+      this.clearPiece();
+      this.y++;
+      this.drawPiece();
+    }
   }
   moveRight() {
     if (this.isCollidingRight(this.activePiece) === false) {
@@ -75,15 +77,16 @@ class Tetromino {
       this.drawPiece();
     }
   }
-  //each piece can has four versions, in order to cycle between all of them we can add 1 to the current value of pieceNum and use the modulus operator to get the next number. Once pieceNum is at value 3, adding 1 to it will cycle us back to the 0.
+  // Each piece can has four versions, in order to cycle between all of them we can add 1 to the current value of pieceNum and use the modulus operator to get the next number. Once pieceNum is at value 3, adding 1 to it will cycle us back to the 0.
   rotatePiece() {
     this.clearPiece();
     this.pieceNum = (this.pieceNum + 1) % this.piece.length;
     this.activePiece = this.piece[this.pieceNum];
     this.drawPiece();
   }
-  // - Each piece cannot move beyond the left, right, and bottom wall of the game board.
+  // Each piece cannot move beyond the left, right, and bottom wall of the game board.
   // Check to see if current X + the column + 1 > COL.
+  // Anything greater than COL (10) is outside of the right wall of the canvas.
   isCollidingRight(activePc) {
     let nextX;
     for(let r = 0; r < activePc.length; r++) {
@@ -91,7 +94,7 @@ class Tetromino {
         if(activePc[r][c]) {
           nextX = this.x + c + 1;
           if (nextX >= COL) {
-            console.log(nextX);
+            console.log('there\'s the right wall');
             return true;
           }
         }
@@ -99,6 +102,8 @@ class Tetromino {
     }
     return false;
   }
+  // Check to see if current X + the column - 1 > 0.
+  // Anything less than 0 is outside the left wall of the canvas.
   isCollidingLeft(activePc) {
     let nextX;
     for(let r = 0; r < activePc.length; r++) {
@@ -106,7 +111,7 @@ class Tetromino {
         if(activePc[r][c]) {
           nextX = this.x + c - 1;
           if (nextX < 0) {
-            console.log(nextX);
+            console.log('bumping the left wall');
             return true;
           }
         }
@@ -114,7 +119,24 @@ class Tetromino {
     }
     return false;
   }
-
+  // Check to see if current X + the column + 1 > ROW.
+  // Anything greater than 20 is outside the bottom part of the canvas.
+  isCollidingBottom(activePc) {
+    let nextY;
+    for(let r = 0; r < activePc.length; r++) {
+      for(let c = 0; c < activePc[r].length; c++) {
+        if(activePc[r][c]) {
+          nextY = this.y + r + 1;
+          if(nextY >= ROW) {
+            console.log('bottom of the board');
+            return true;
+          }
+        }
+      }
+    }
+    return false;
+  }
+  
 }
 
 /*----------------------------------------*/ 
