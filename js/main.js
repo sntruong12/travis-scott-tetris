@@ -13,6 +13,7 @@ const SQ = 30;
 // define an empty sqare in the board
 const EMPTY = 'rgba(255, 255, 255, .25)';
 
+// collection of pieces with assigned colors. used in render function to generate the next piece.
 const PIECES = [
   [I, '#D1B37E'],
   [J, '#E83627'],
@@ -32,11 +33,11 @@ class Tetromino {
     // pieceNum is used to reference the tetrominoes starting position.
     this.pieceNum = 0;
     this.activePiece = this.piece[this.pieceNum];
-    // x and y is for the start position of the piece aka the top of the board in the center. These values are updated when moving down,left, or right.
+    // x and y is for the current position of the piece. These values are updated when moving down,left, or right. Adding 1 to X translates to 30px to the right.
     this.x = 3;
     this.y = 0;
   }
-  // in tetrominoes.js we visualize the tetris pieces as an array of arrays. 1 indicates one square that makes up the piece and 0 indicates an empty square. 1 and 0 have boolean values for true and false respectively so we can draw squares based checking the boolean value of each element of every array. every piece has different versions based on rotation. This draw method will draw the piece based on it's current activePiece property.
+  // in tetrominoes.js, we visualize the tetris pieces as an array of arrays. 1 indicates one square that makes up the piece and 0 indicates an empty square. 1 and 0 have boolean values for true and false respectively so we can draw squares based checking the boolean value of each element of every array. every piece has different versions based on rotation. This draw method will draw the piece based on the activePiece property.
   drawPiece() {
     this.activePiece.forEach((row, rIdx) => {
       row.forEach((col, cIdx) => {
@@ -172,7 +173,7 @@ function init() {
   render();
   // startTime = Date.now();
   // timer();
-  // setInterval(drop, 1000);
+  
 }
 
 //  create the game board
@@ -205,7 +206,7 @@ function drawSq(x, y, color) {
   // define the color of the drawing
   context.fillStyle = color;
   // define the location (x, y) and the size of the drawing
-  // multiple by SQ because that's the size of one cell so we want to make sure 1 unit for x or y will increment/decrement based on our SQ unit.
+  // multiply by SQ because that's the size of one cell so we want to make sure 1 unit for x or y will increment/decrement based on our SQ unit.
   context.fillRect(x*SQ, y*SQ, SQ, SQ);
   // define the color of the outline
   context.strokeStyle = 'black';
@@ -218,6 +219,8 @@ function render() {
   currentPiece = new Tetromino(PIECES[randomPiece][0], PIECES[randomPiece][1]);
 
   currentPiece.drawPiece();
+  //drop the piece down everyone one second
+  setInterval(timedDrop, 1000);
   
 }
 
@@ -233,9 +236,9 @@ function render() {
 //   requestAnimationFrame(timer);
 // }
 
-// function drop() {
-//   currentPiece.moveDown();
-// }
+function timedDrop() {
+  currentPiece.moveDown();
+}
 
 // User can move the currentPiece left, right, or down and also rotate the piece. Callback function to match the arrow keys and the z key to specific options.
 
