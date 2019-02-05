@@ -69,9 +69,11 @@ class Tetromino {
     }
   }
   moveLeft() {
-    this.clearPiece();
-    this.x--;
-    this.drawPiece();
+    if (this.isCollidingLeft(this.activePiece) === false) {
+      this.clearPiece();
+      this.x--;
+      this.drawPiece();
+    }
   }
   //each piece can has four versions, in order to cycle between all of them we can add 1 to the current value of pieceNum and use the modulus operator to get the next number. Once pieceNum is at value 3, adding 1 to it will cycle us back to the 0.
   rotatePiece() {
@@ -97,9 +99,20 @@ class Tetromino {
     }
     return false;
   }
-
-  isCollidingLeft() {
-    
+  isCollidingLeft(activePc) {
+    let nextX;
+    for(let r = 0; r < activePc.length; r++) {
+      for(let c = 0; c < activePc[r].length; c++) {
+        if(activePc[r][c]) {
+          nextX = this.x + c - 1;
+          if (nextX < 0) {
+            console.log(nextX);
+            return true;
+          }
+        }
+      }
+    }
+    return false;
   }
 
 }
