@@ -11,7 +11,7 @@ const COL = 10;
 const SQ = 30;
 
 // define an empty sqare in the board
-const EMPTY = '#FFFFFF';
+const EMPTY = 'rgba(255, 255, 255, .25)';
 
 const PIECES = [
   [I, '#D1B37E'],
@@ -32,11 +32,11 @@ class Tetromino {
     // pieceNum is used to reference the tetrominoes starting position.
     this.pieceNum = 0;
     this.activePiece = this.piece[this.pieceNum];
-    // x and y is for the start position of the piece aka the top of the board in the center
+    // x and y is for the start position of the piece aka the top of the board in the center. These values are updated when moving down,left, or right.
     this.x = 3;
     this.y = 0;
   }
-// in tetrominoes.js we visualize the tetris pieces as an array of an array. 1 indicates a square and 0 indicates an empty square. 1 and 0 have boolean values for true and false respectively so we can draw squares based checking the boolean value of each element of every array. every piece has different versions based on rotation. This draw method will draw the piece based on it's current activePiece property.
+  // in tetrominoes.js we visualize the tetris pieces as an array of arrays. 1 indicates one square that makes up the piece and 0 indicates an empty square. 1 and 0 have boolean values for true and false respectively so we can draw squares based checking the boolean value of each element of every array. every piece has different versions based on rotation. This draw method will draw the piece based on it's current activePiece property.
   drawPiece() {
     this.activePiece.forEach((row, rIdx) => {
       row.forEach((col, cIdx) => {
@@ -55,16 +55,18 @@ class Tetromino {
       })
     })
   }
-// moving the pieces will require 3 things, clear the previous piece,increment the y value to move it down one cell, then draw the piece.
+  // moving the pieces will require 3 things, clear the previous piece,increment the y value to move it down one cell, then draw the piece.
   moveDown() {
     this.clearPiece();
     this.y++;
     this.drawPiece();
   }
   moveRight() {
-    this.clearPiece();
-    this.x++;
-    this.drawPiece();
+    if (this.isCollidingRight(this.activePiece) === false) {
+      this.clearPiece();
+      this.x++;
+      this.drawPiece();
+    }
   }
   moveLeft() {
     this.clearPiece();
@@ -78,11 +80,29 @@ class Tetromino {
     this.activePiece = this.piece[this.pieceNum];
     this.drawPiece();
   }
+  // - Each piece cannot move beyond the left, right, and bottom wall of the game board.
+  // Check to see if current X + the column + 1 > COL.
+  isCollidingRight(activePc) {
+    let nextX;
+    for(let r = 0; r < activePc.length; r++) {
+      for(let c = 0; c < activePc[r].length; c++) {
+        if(activePc[r][c]) {
+          nextX = this.x + c + 1;
+          if (nextX >= COL) {
+            console.log(nextX);
+            return true;
+          }
+        }
+      }
+    }
+    return false;
+  }
+
+  isCollidingLeft() {
+    
+  }
+
 }
-
-// let son = new Tetromino(PIECES[0][0], PIECES[0][1]);
-
-
 
 /*----------------------------------------*/ 
 /*----- app's state (variables) -----*/ 
@@ -125,7 +145,7 @@ function createBoard() {
 // create 20 rows on the board
   for(let r = 0; r < ROW; r++) {
     // set to empty array because it will contain a column value as well.
-    board[r] = [ ];
+    board[r] = [];
     // create 10 columns on the board
     for(let c = 0; c < COL; c++) {
       // set it to empty to let us know the cell is such.
@@ -138,7 +158,7 @@ function createBoard() {
 function drawBoard() {
   board.forEach((row, rIdx) => {
     row.forEach((col, cIdx) => {
-      drawSq(cIdx, rIdx, board[rIdx][cIdx]);
+      drawSq(cIdx, rIdx, EMPTY);
     })
   });
 }
@@ -182,7 +202,7 @@ function render() {
 //   currentPiece.moveDown();
 // }
 
-// User can move the currentPiece left, right, or down. Also can rotate. Callback function to match the arrow keys and the z key to specific options.
+// User can move the currentPiece left, right, or down and also rotate the piece. Callback function to match the arrow keys and the z key to specific options.
 
 function movePiece(event) {
   switch (event.key) {
@@ -201,7 +221,6 @@ function movePiece(event) {
   }
 }
 
-// - Each piece cannot move beyond the left and right wall of the game board.
 // - We need to lock the pieces in place once they reach the bottom of the board or touch the top of anoother piece. 
 // - Once the game piece is locked, that should update the gameboard and spawn a new random tetromino at the top. 
 
