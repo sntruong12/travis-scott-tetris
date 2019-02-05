@@ -4,8 +4,13 @@
 
 body {
   margin: 0;
+  font-family: 'Courier New', Courier, monospace;
+  background-color: #000000;
+  color: #ffffe8;
+  height: 100vh;
+
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: 1fr 300px 1fr;
   grid-template-rows: 100px 1fr;
   grid-template-areas:
   "hdr hdr hdr"
@@ -19,14 +24,40 @@ header {
 
 section.board-section {
   grid-area: board;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 section.info-section {
   grid-area: info;
+
+  text-align: center;
+}
+
+button.start-btn {
+  border: #ffffe8 solid 3px;
+  outline: none;
+  background-color: #000000;
+  color: #ffffe8;
+  font-family: 'Courier New', Courier, monospace;
+}
+
+button.i-btn {
+  border: #ffffe8 solid 3px;
+  outline: none;
+  background-color: #000000;
+  color: #ffffe8;
+  font-family: 'Courier New', Courier, monospace;
 }
 
 section.media-section {
   grid-area: media;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 canvas {
