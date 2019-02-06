@@ -44,6 +44,11 @@ button.start-btn {
   font-family: 'Courier New', Courier, monospace;
 }
 
+button.start-btn:active {
+  background-color: #ffffe8;
+  color: #000000;
+}
+
 button.i-btn {
   border: #ffffe8 solid 3px;
   outline: none;
@@ -52,12 +57,23 @@ button.i-btn {
   font-family: 'Courier New', Courier, monospace;
 }
 
+button.i-btn:active {
+  background-color: #ffffe8;
+  color: #000000;
+}
+
 section.media-section {
   grid-area: media;
 
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
+}
+
+section > img {
+  height: 400px;
+  width: 
 }
 
 canvas {
