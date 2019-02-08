@@ -2,7 +2,6 @@
 /*----- constants -----*/ 
 /*----------------------------------------*/ 
 
-
 // define how many rows and columns the gameboard contains - 200 cells total.
 const ROW = 20;
 const COL = 10;
@@ -11,17 +10,17 @@ const COL = 10;
 const SQ = 30;
 
 // define an empty sqare in the board
-const EMPTY = 'rgba(255, 255, 255, .25)';
+const EMPTY = 'white';
 
 // collection of pieces with assigned colors. used in render function to generate the next piece.
 const PIECES = [
-  [I, '#D1B37E'],
-  [J, '#E83627'],
-  [L, '#86A4BF'],
-  [O, '#3D88A7'],
+  [I, '#163174'],
+  [J, '#C69761'],
+  [L, '#FEEC09'],
+  [O, '#8061AC'],
   [S, '#CF8131'],
   [T, '#401A08'],
-  [Z, '#2B5B9E']
+  [Z, '#C21F19']
 ];
 
 // class for tetromino pieces.
@@ -58,93 +57,96 @@ class Tetromino {
   }
   // moving the pieces will require 3 things, clear the previous piece,increment the y value to move it down one cell, then draw the piece.
   moveDown() {
-    if(this.isCollidingBottom(this.activePiece) === false) {
+    if(this.isColliding(0, 1, this.activePiece) === false) {
       this.clearPiece();
       this.y++;
       this.drawPiece();
+    } else {
+      this.lockPiece();
+      render();
     }
   }
   moveRight() {
-    if (this.isCollidingRight(this.activePiece) === false) {
+    if (this.isColliding(1, 0, this.activePiece) === false) {
       this.clearPiece();
       this.x++;
       this.drawPiece();
     }
   }
   moveLeft() {
-    if (this.isCollidingLeft(this.activePiece) === false) {
+    if (this.isColliding(-1, 0, this.activePiece) === false) {
       this.clearPiece();
       this.x--;
       this.drawPiece();
     }
   }
-  // Each piece can has four versions, in order to cycle between all of them we can add 1 to the current value of pieceNum and use the modulus operator to get the next number. Once pieceNum is at value 3, adding 1 to it will cycle us back to the 0.
+  // each piece can has four versions, in order to cycle between all of them we can add 1 to the current value of pieceNum and use the modulus operator to get the next number. Once pieceNum is at value 3, adding 1 to it will cycle us back to the 0.
   rotatePiece() {
     this.clearPiece();
     this.pieceNum = (this.pieceNum + 1) % this.piece.length;
     this.activePiece = this.piece[this.pieceNum];
     this.drawPiece();
   }
-  // Each piece cannot move beyond the left, right, and bottom wall of the game board.
-  // Check to see if current X + the column + 1 > COL.
-  // Anything greater than COL (10) is outside of the right wall of the canvas.
-  isCollidingRight(activePc) {
-    let nextX;
+  // each piece cannot move beyond the left, right, and bottom wall of the game board.
+  // check to see if current X + the column + 1 > COL.
+  // anything greater than COL (10) is outside of the right wall of the canvas.
+  // check to see if current X + the column - 1 > 0.
+  // anything less than 0 is outside the left wall of the canvas.
+  // check to see if current X + the column + 1 > ROW.
+  // anything greater than 20 is outside the bottom part of the canvas.
+  isColliding(x, y, activePc) {
+    let nextX, nextY;
     for(let r = 0; r < activePc.length; r++) {
       for(let c = 0; c < activePc[r].length; c++) {
-        if(activePc[r][c]) {
-          nextX = this.x + c + 1;
-          if (nextX >= COL) {
-            console.log('there\'s the right wall');
-            return true;
-          }
+        // this skips over all the empty values of the activePiece.
+        if(activePc[r][c] == false) {
+          continue;
+        }
+        // get the value for the next X or Y value
+        nextX = this.x + c + x;
+        nextY = this.y + r + y;
+        // check to see if nextX or nextY is outside of the board
+        if(nextX >= COL || nextX < 0 || nextY >= ROW) {
+          console.log('bumping into a wall');
+          return true;
+        }
+        // checks for locked piece on board. If the board has a cell that is empty then return true so the piece can continue to move left right or down.
+        if(board[nextY][nextX] !== EMPTY) {
+          console.log('colliding into a locked piece')
+          return true
         }
       }
     }
     return false;
   }
-  // Check to see if current X + the column - 1 > 0.
-  // Anything less than 0 is outside the left wall of the canvas.
-  isCollidingLeft(activePc) {
-    let nextX;
-    for(let r = 0; r < activePc.length; r++) {
-      for(let c = 0; c < activePc[r].length; c++) {
-        if(activePc[r][c]) {
-          nextX = this.x + c - 1;
-          if (nextX < 0) {
-            console.log('bumping the left wall');
-            return true;
-          }
+  // lock piece into the board
+  lockPiece() {
+    for(let r = 0; r < this.activePiece.length; r++) {
+      for(let c = 0; c < this.activePiece[r].length; c++) {
+        //skip over the the empty values of the activePiece.
+        if(this.activePiece[r][c] == false) {
+          continue;
         }
-      }
-    }
-    return false;
-  }
-  // Check to see if current X + the column + 1 > ROW.
-  // Anything greater than 20 is outside the bottom part of the canvas.
-  isCollidingBottom(activePc) {
-    let nextY;
-    for(let r = 0; r < activePc.length; r++) {
-      for(let c = 0; c < activePc[r].length; c++) {
-        if(activePc[r][c]) {
-          nextY = this.y + r + 1;
-          if(nextY >= ROW) {
-            console.log('bottom of the board');
-            return true;
-          }
+        //game over check
+        if(this.y + r < 0) {
+          // use gameOver var to cut the animation frame
+          gameOver = true;
+          console.log('game over');
+          break;
         }
+          // assigns the piece color to the board so that it differs from holding the EMPTY value.
+        board[this.y + r][this.x + c] = this.color;
       }
+        
     }
-    return false;
-  }
-  
+  }  
 }
 
 /*----------------------------------------*/ 
 /*----- app's state (variables) -----*/ 
 /*----------------------------------------*/ 
 
-let board, currentPiece, startTime;
+let board, currentPiece, startTime, gameOver;
 
 /*----- cached element references -----*/ 
 const canvas = document.querySelector('canvas');
@@ -155,25 +157,23 @@ const context = canvas.getContext('2d');
 /*----- event listeners -----*/ 
 /*----------------------------------------*/ 
 
+// start button will initialize the game.
+// fade in audio of instrumental Travis Scott music.
+document.querySelector('.start-btn').addEventListener('click', init);
 document.addEventListener('keydown', movePiece);
 
 /*----------------------------------------*/ 
 /*----- functions -----*/
 /*----------------------------------------*/ 
 
-
-// start button will initialize the game.
-// - Fade in audio of instrumental Travis Scott music.
-init();
-
+// start the game - waiting for click
 function init() {
   board = [];
+  startTime = Date.now();
+  gameOver = false;
   createBoard();
   drawBoard();
   render();
-  // startTime = Date.now();
-  // timer();
-  
 }
 
 //  create the game board
@@ -201,7 +201,7 @@ function drawBoard() {
 
 // - The game board will contain random opaque background images of Travis Scott.
 
-//  Draw a tetromino that will descend from the top row down to the bottom of the game board. 
+//  draw a tetromino that will descend from the top row down to the bottom of the game board. 
 function drawSq(x, y, color) {
   // define the color of the drawing
   context.fillStyle = color;
@@ -214,33 +214,35 @@ function drawSq(x, y, color) {
 }
 
 function render() {
-  let randomPiece = Math.floor(Math.random() * PIECES.length);
-  console.log(randomPiece);
-  currentPiece = new Tetromino(PIECES[randomPiece][0], PIECES[randomPiece][1]);
-
+  randomPiece();
   currentPiece.drawPiece();
   //drop the piece down everyone one second
-  setInterval(timedDrop, 1000);
+  timedDrop();
   
 }
 
-// - The tetromino will drop one row every 1 second.
-// function timer() {
-//   let now = Date.now();
-//   let difference = now - startTime;
-//   console.log(difference);
-//   if(difference > 1000) {
-//     currentPiece.moveDown();
-//     startTime = Date.now();
-//   }
-//   requestAnimationFrame(timer);
-// }
-
-function timedDrop() {
-  currentPiece.moveDown();
+// create new random piece
+function randomPiece() {
+  let random = Math.floor(Math.random() * PIECES.length);
+  currentPiece = new Tetromino(PIECES[random][0], PIECES[random][1]);
 }
 
-// User can move the currentPiece left, right, or down and also rotate the piece. Callback function to match the arrow keys and the z key to specific options.
+// drop the piece every second
+function timedDrop() {
+  let currentTime = Date.now();
+  let differenceTime = currentTime - startTime;
+  // console.log(differenceTime);
+  if (differenceTime > 1000) {
+    currentPiece.moveDown();
+    startTime = Date.now();
+  }
+  //game runs until gameOver is true;
+  if(gameOver === false) {
+    requestAnimationFrame(timedDrop);
+  }  
+}
+
+// user can move the currentPiece left, right, or down and also rotate the piece. Callback function to match the arrow keys and the z key to specific options.
 
 function movePiece(event) {
   switch (event.key) {
@@ -259,8 +261,7 @@ function movePiece(event) {
   }
 }
 
-// - We need to lock the pieces in place once they reach the bottom of the board or touch the top of anoother piece. 
-// - Once the game piece is locked, that should update the gameboard and spawn a new random tetromino at the top. 
+
 
 
 // 3. When all ten cells in a single row or mulitple rows is occupied, update the gameboard to clear those rows that are filled.
