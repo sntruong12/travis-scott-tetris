@@ -2,6 +2,14 @@
   box-sizing: border-box;
 }
 
+canvas {
+  /* background-image: url('https://i.pinimg.com/originals/34/29/b2/3429b2fd5ecca0e502f50e27c1a792e9.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center; */
+  background-color: white;
+}
+
 body {
   margin: 0;
   font-family: 'Courier New', Courier, monospace;
@@ -76,9 +84,3 @@ section > img {
   width: 
 }
 
-canvas {
-  background-image: url('https://i.pinimg.com/originals/34/29/b2/3429b2fd5ecca0e502f50e27c1a792e9.jpg');
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: center;
-}
