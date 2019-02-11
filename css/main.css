@@ -42,6 +42,25 @@ section.info-section {
   grid-area: info;
 
   text-align: center;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr 1fr 1fr;
+  grid-template-areas:
+  "score"
+  "btn"
+  "spotify";
+}
+
+p.score-section {
+  grid-area: score;
+}
+
+div.btn-div {
+  grid-area: btn;
+}
+
+div.spotify {
+  grid-area: spotify;
 }
 
 button.start-btn {
