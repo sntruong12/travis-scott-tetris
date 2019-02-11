@@ -1,6 +1,43 @@
 /*----------------------------------------*/ 
 /*----- constants -----*/ 
 /*----------------------------------------*/ 
+// object containg path and text for each adlib
+const ADLIBS = {
+  path: [
+    'audio/fun.wav',
+    'audio/its-lit.wav',
+    'audio/la-flame.wav',
+    'audio/nah-straight-up.wav',
+    'audio/no-eng.wav',
+    'audio/oh-no-no.wav',
+    'audio/omg.wav',
+    'audio/rrr.wav',
+    'audio/rrr2.wav',
+    'audio/s-up.wav',
+    'audio/s-up2.wav',
+    'audio/s-up3.wav',
+    'audio/woo.wav',
+    'audio/ya-ya.wav',
+    'audio/one-more-time.wav'
+  ],
+  text: [
+    'this is fun!',
+    'it\'s lit!',
+    'la flame!',
+    'naaahhh! straight up!',
+    'don\'t know no english!',
+    'oh no no!',
+    'omg!',
+    'rrrrrrrrrrrrrrrr!',
+    'rrrrrrrrrrrrrrrr!',
+    'straight up!',
+    'straight up!',
+    'straight up!',
+    'woooooooooooo!',
+    'ya! ya!',
+    'one mo time!',
+  ],
+};
 
 // define how many rows and columns the gameboard contains - 200 cells total.
 const ROW = 20;
@@ -55,7 +92,7 @@ class Tetromino {
       })
     })
   }
-  // moving the pieces will require 3 things, clear the previous piece,increment the y value to move it down one cell, then draw the piece.
+  // moving the pieces will require 3 things, clear the previous piece,increment the y value to move it down one cell, then draw the piece. Before we can do move the piece, the method isColliding is called to check if the next move is value or occupied by existing pieces.
   moveDown() {
     if(this.isColliding(0, 1, this.activePiece) === false) {
       this.clearPiece();
@@ -119,8 +156,10 @@ class Tetromino {
     }
     return false;
   }
-  // lock piece into the board
+  // method for updating board with locked pieces and for clearing full rows. Contains two for loops running when method is called.
+  // this method also updates the score and triggers the audio to play.
   lockPiece() {
+    // locking pieces into the board
     for(let r = 0; r < this.activePiece.length; r++) {
       for(let c = 0; c < this.activePiece[r].length; c++) {
         //skip over the the empty values of the activePiece.
@@ -139,6 +178,47 @@ class Tetromino {
       }
         
     }
+
+    // check and clear full rows
+    for(let r = 0; r < ROW; r++) {
+      let isRowFull = true;
+      for(let c = 0; c < COL; c++) {
+        // will update isRowFull to false if any square in the row contains the EMPTY value which will prevent the following if statement from running.
+        isRowFull = isRowFull && board[r][c] !== EMPTY;
+      }
+      // run this code if the row is full
+      if(isRowFull) {
+        // moves the rows down to one
+        for(let y = r; y > 1; y--) {
+          for (let c = 0; c < COL; c++) {
+            board[y][c] = board[y-1][c];
+            console.log('moving all the rows down')
+          }
+        }
+        
+        // assign the top row to be blank when a row/rows are cleared
+        for(let c = 0; c < COL; c ++) {
+          board[0][c] = EMPTY;
+          console.log('top row of board is cleared');
+        }
+
+        // increase score
+        score += 100;
+        console.log('score was increased');
+
+        // play currentAdlibAudio
+        currentAdlibAudio.play();
+
+        // display currentAdlibText
+        displayThoughtsEl.innerHTML = `<p>${currentAdLibText}</p>`;
+
+      }
+    }
+
+    // update board
+    drawBoard();
+    // update score span with score
+    scoreEl.innerHTML = `${score}`;
   }  
 }
 
@@ -146,12 +226,14 @@ class Tetromino {
 /*----- app's state (variables) -----*/ 
 /*----------------------------------------*/ 
 
-let board, currentPiece, startTime, gameOver;
+let board, currentPiece, currentAdlibAudio, currentAdLibText, startTime, gameOver, score;
 
 /*----- cached element references -----*/ 
 const canvas = document.querySelector('canvas');
 // this is a method on the canvas obj that allows us to draw on the canvas
 const context = canvas.getContext('2d');
+const scoreEl = document.querySelector('#score-span');
+const displayThoughtsEl = document.querySelector('#display-thoughts');
 
 /*----------------------------------------*/ 
 /*----- event listeners -----*/ 
@@ -171,6 +253,7 @@ function init() {
   board = [];
   startTime = Date.now();
   gameOver = false;
+  score = 0;
   createBoard();
   drawBoard();
   render();
@@ -182,7 +265,7 @@ function createBoard() {
   for(let r = 0; r < ROW; r++) {
     // set to empty array because it will contain a column value as well.
     board[r] = [];
-    // create 10 columns on the board
+    // create 10 columns on the board per row.
     for(let c = 0; c < COL; c++) {
       // set it to empty to let us know the cell is such.
       board[r][c] = EMPTY;
@@ -194,7 +277,7 @@ function createBoard() {
 function drawBoard() {
   board.forEach((row, rIdx) => {
     row.forEach((col, cIdx) => {
-      drawSq(cIdx, rIdx, EMPTY);
+      drawSq(cIdx, rIdx, board[rIdx][cIdx]);
     })
   });
 }
@@ -216,6 +299,8 @@ function drawSq(x, y, color) {
 function render() {
   randomPiece();
   currentPiece.drawPiece();
+  // generate random adlib
+  randomAdlib();
   //drop the piece down everyone one second
   timedDrop();
   
@@ -225,6 +310,15 @@ function render() {
 function randomPiece() {
   let random = Math.floor(Math.random() * PIECES.length);
   currentPiece = new Tetromino(PIECES[random][0], PIECES[random][1]);
+}
+
+// creates a new random audio to play when a row is cleared.
+// gets the corresponding text for the adlib.
+function randomAdlib() {
+  let random = Math.floor(Math.random() * ADLIBS.path.length);
+  currentAdlibAudio = new Audio(`${ADLIBS.path[random]}`);
+  currentAdLibText = ADLIBS.text[random];
+  console.log(currentAdLibText);
 }
 
 // drop the piece every second
@@ -260,11 +354,3 @@ function movePiece(event) {
     break;
   }
 }
-
-
-
-
-// 3. When all ten cells in a single row or mulitple rows is occupied, update the gameboard to clear those rows that are filled.
-// - If there are cells occupied on any rows above a cleared row, those rows should shift down and fill in the cleared rows.
-// - If a row is cleared, add a sound bite of Travis Scott's adlibs will play once.
-// - When you clear a row or multiple rows the score will be updated based on the following table.
