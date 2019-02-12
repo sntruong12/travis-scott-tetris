@@ -47,7 +47,7 @@ const COL = 10;
 const SQ = 30;
 
 // define an empty sqare in the board
-const EMPTY = 'white';
+const EMPTY = 'black';
 
 // collection of pieces with assigned colors. used in render function to generate the next piece.
 const PIECES = [
@@ -298,7 +298,7 @@ function drawSq(x, y, color) {
   // multiply by SQ because that's the size of one cell so we want to make sure 1 unit for x or y will increment/decrement based on our SQ unit.
   context.fillRect(x*SQ, y*SQ, SQ, SQ);
   // define the color of the outline
-  context.strokeStyle = 'black';
+  context.strokeStyle = 'white';
   context.strokeRect(x*SQ, y*SQ, SQ, SQ);
 }
 
