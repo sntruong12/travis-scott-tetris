@@ -1,6 +1,6 @@
 # Travis Scott Tetris
 
-placeholder for image of the game
+![travis scott tetris](https://i.imgur.com/jHW371e.png "An image of the tetris game")
 
 **_IT'S LIT!_** 
 
