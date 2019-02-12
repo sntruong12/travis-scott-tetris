@@ -32,6 +32,33 @@ header {
   text-align: center;
 }
 
+h1.title {
+  margin-bottom: 5px;
+}
+
+span.hdr-ltr-1 {
+  color: pink;
+}
+span.hdr-ltr-2 {
+  color: green;
+}
+span.hdr-ltr-3 {
+  color: blue;
+}
+span.hdr-ltr-4 {
+  color: white;
+}
+span.hdr-ltr-5 {
+  color: red;
+}
+span.hdr-ltr-6 {
+  color: yellow;
+}
+
+img.globe-img {
+  width: 50px;
+}
+
 section.board-section {
   grid-area: board;
 
@@ -46,24 +73,42 @@ section.info-section {
   text-align: center;
   display: grid;
   grid-template-columns: 1fr;
-  grid-template-rows: 1fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
   grid-template-areas:
   "score"
-  "btn"
-  "spotify";
+  "btn";
 }
 
-p.score-section {
+span.score-ltr-1 {
+  color: yellow;
+}
+span.score-ltr-2 {
+  color: red;
+}
+span.score-ltr-3 {
+  color: white;
+}
+span.score-ltr-4 {
+  color: blue;
+}
+span.score-ltr-5 {
+  color: green;
+}
+span.score-ltr-6 {
+  color: pink;
+}
+
+span.score-ltr-1, span.score-ltr-2, span.score-ltr-3, span.score-ltr-4, span.score-ltr-5, span.score-ltr-6 {
+  margin: 0 -5px;
+} 
+
+h2.score-section {
   grid-area: score;
   text-align: left;
 }
 
 div.btn-div {
   grid-area: btn;
-}
-
-div.spotify {
-  grid-area: spotify;
 }
 
 button.start-btn {
