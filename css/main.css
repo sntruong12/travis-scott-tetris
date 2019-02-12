@@ -7,7 +7,8 @@ canvas {
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center; */
-  background-color: white;
+  background-color: black;
+  border: 3px white solid;
 }
 
 body {
@@ -18,11 +19,12 @@ body {
   height: 100vh;
 
   display: grid;
-  grid-template-columns: 1fr 300px 1fr;
-  grid-template-rows: 100px 1fr;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 100px 1fr 1fr;
   grid-template-areas:
-  "hdr hdr hdr"
-  "board info media";
+  "hdr hdr"
+  "board info"
+  "board media";
 }
 
 header {
@@ -53,6 +55,7 @@ section.info-section {
 
 p.score-section {
   grid-area: score;
+  text-align: left;
 }
 
 div.btn-div {
@@ -98,8 +101,18 @@ section.media-section {
   align-items: center;
 }
 
+section#display-thoughts {
+  border: #ffffe8 solid 3px;
+  border-radius: 6px;
+  padding: 10px;
+} 
+
+i.material-icons {
+  margin-top: -17px;
+  font-size: 40px;
+}
+
 section > img {
   height: 400px;
-  width: 
 }
 
