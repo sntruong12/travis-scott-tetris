@@ -51,12 +51,12 @@ const EMPTY = 'black';
 
 // collection of pieces with assigned colors. used in render function to generate the next piece.
 const PIECES = [
-  [I, '#163174'],
-  [J, '#C69761'],
+  [I, '#3AABF1'],
+  [J, '#03FC0C'],
   [L, '#FEEC09'],
-  [O, '#8061AC'],
+  [O, '#FF01FF'],
   [S, '#CF8131'],
-  [T, '#401A08'],
+  [T, '#6A54B4'],
   [Z, '#C21F19']
 ];
 
