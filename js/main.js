@@ -159,7 +159,7 @@ class Tetromino {
   // method for updating board with locked pieces and for clearing full rows. Contains two for loops running when method is called.
   // this method also updates the score and triggers the audio to play.
   lockPiece() {
-    // locking pieces into the board
+    // assign colors to board which will lock the piece in place.
     for(let r = 0; r < this.activePiece.length; r++) {
       for(let c = 0; c < this.activePiece[r].length; c++) {
         //skip over the the empty values of the activePiece.
@@ -168,7 +168,7 @@ class Tetromino {
         }
         //game over check
         if(this.y + r < 0) {
-          // use gameOver var to cut the animation frame
+          // use gameOver var to cut the animation frame in timedDrop
           gameOver = true;
           console.log('game over');
           break;
@@ -226,7 +226,7 @@ class Tetromino {
 /*----- app's state (variables) -----*/ 
 /*----------------------------------------*/ 
 
-let board, currentPiece, currentAdlibAudio, currentAdLibText, startTime, gameOver, score;
+let board, currentPiece, currentAdlibAudio, currentAdLibText, startSound, startTime, gameOver, score;
 
 /*----- cached element references -----*/ 
 const canvas = document.querySelector('canvas');
@@ -254,9 +254,15 @@ function init() {
   startTime = Date.now();
   gameOver = false;
   score = 0;
+  startAdlib();
   createBoard();
   drawBoard();
   render();
+}
+
+function startAdlib() {
+  startSound = new Audio(ADLIBS.path[1]);
+  startSound.play();
 }
 
 //  create the game board
